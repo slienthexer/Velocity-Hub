@@ -12,10 +12,16 @@ local TeleportService = game:GetService("TeleportService")
 local camera = workspace.CurrentCamera
 
 function getnames()
-local names={}
-for _,p in pairs(Players:GetPlayers()) do
-table.insert(names,p.Name)
-end
+
+    local names = {}
+
+    for _, p in pairs(Players:GetPlayers()) do
+
+        table.insert(names, p.Name)
+
+    end
+
+    return names
 end
 
 repeat task.wait() until player.Character
@@ -66,10 +72,10 @@ local Window = WindUI:CreateWindow({
         Note = "Velocity Hub Key System.",
         
         Thumbnail = { -- the image which is located on the left. optional. it can be removed
-            Image = "rbxassetid://113993699078111",
-            Title = "Velocity Logo", -- optional. it can be removed
+            Image = "rbxassetid://1234",
+            Title = "Thumbnail example", -- optional. it can be removed
         },
-        URL = "https://discord.gg/ckGvbX6EHr", -- link to get the key
+        URL = "YOUR LINK TO GET KEY (Discord, Linkvertise, Pastebin, etc.)", -- link to get the key
         
         SaveKey = true, -- automatically save and load the key.
     },
@@ -106,7 +112,7 @@ local ServerTab = Window:Tab({
 -- comabt buttons and shi sections
 
 local CombatSection = CombatTab:Section({
-    Title = "PVP / Combat"
+    Title = "PVP / Combat",
 })
 
 local aimbot=false
@@ -156,7 +162,7 @@ end)
 -- PLAYER SECTION LOLZ 67
 
 local MainPlayerSection = PlayerTab:Section({
-    Title = "Local Player"
+    Title = "Local Player",
     Icon = "user",
 })
 
@@ -229,26 +235,37 @@ end
 end)
 
 local TPSection = PlayerTab:Section({
-    Title = "TP"
+    Title = "TP",
     Icon = "user",
 })
 
-PlayerTab:Dropdown({
-Title="Select Player",
-Values=getnames()
-Callback=function(v)
-selected=v
-end
+local PlayerDropdown = PlayerTab:Dropdown({
+
+    Title = "Select Player",
+
+    Values = getnames(),
+
+    Callback = function(v)
+
+        selected = v
+
+    end
+
 })
 
 PlayerTab:Button({
-Title="Refresh List",
-Icon = "reload"
-Callback=function()
-getnames()
-end
-})
 
+    Title = "Refresh List",
+
+    Icon = "reload",
+
+    Callback = function()
+
+        PlayerDropdown:Refresh(getnames())
+
+    end
+
+})
 
 PlayerTab:Button({
 Title="Teleport To Player",
@@ -286,8 +303,8 @@ end
 -- VISUALS
 
 local VisualsSection = VisualTab:Section({
-    Title = "Visuals"
-    Icon = "eye"
+    Title = "Visuals",
+    Icon = "eye",
 })
 
 local FOVSlider = VisualTab:Slider({
@@ -308,11 +325,11 @@ local FPSInput = VisualTab:Input({
     Icon = "square-pen",
     Value = "60",
     Callback = function(fps)
-        setfpscap(fps)
+        setfpscap(tonumber(fps))
     end
 })
 
-local Button = VisualsTab:Button({
+local Button = VisualTab:Button({
     Title = "FPS Booster",
     Desc = "its in the name...",
     Callback = function()
@@ -340,11 +357,10 @@ local GameTPInput = ServerTab:Input({
     Icon = "square-pen",
     Value = "0",
     Callback = function(id)
-        local gameid = id
-        TeleportService:Teleport(gameid,player)
+        
+        TeleportService:Teleport(tonumber(id), player)
     end
 })
 
 -- end 4 now
-
 
