@@ -1,0 +1,350 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local selected=nil
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local TeleportService = game:GetService("TeleportService")
+local camera = workspace.CurrentCamera
+
+function getnames()
+local names={}
+for _,p in pairs(Players:GetPlayers()) do
+table.insert(names,p.Name)
+end
+end
+
+repeat task.wait() until player.Character
+repeat task.wait() until player.Character:FindFirstChild("HumanoidRootPart")
+    
+-- locals da mexico
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local Window = WindUI:CreateWindow({
+    Title = "Velocity Hub", -- window title
+    Icon = "navigation", -- lucide icon or "rbxassetid://" or URL. optional
+    Author = "by x5_vam", -- window subtitle. optional
+    Folder = "MySuperHub", -- folder to save keys and images
+    
+    Size = UDim2.fromOffset(580, 460), -- window size
+    MinSize = Vector2.new(560, 350), -- minimal window size
+    MaxSize = Vector2.new(850, 560), -- maximum window size
+    Transparent = true, -- window transparency
+    Theme = "Emerald", -- library theme
+    Resizable = true, -- the ability to rezize window
+    SideBarWidth = 200, -- sidebar (tabs) width
+    HideSearchBar = true, -- hide search bar
+    ScrollBarEnabled = false, -- scrollbars that are located to the right of the scroll frame
+ 
+    BackgroundImageTransparency = 0.42, -- background image transparency
+    Background = "rbxassetid://1234", -- rbxassetid
+    
+    User = { -- user information located at the bottom left
+        Enabled = true, -- can be toggled with Window.User:Enable() or Window.User:Disable()
+        Anonymous = true, -- can be toggled with Window.User:SetAnonymous(true) --(true or false)
+        Callback = function() -- callback on click. optional. it can be removed
+            print("clicked to the 'user icon'")
+        end,
+    },
+    
+    KeySystem = { -- key system from this library
+        --  ↓ DEPRECATED
+        -- Key = { "1234", "5678" },
+ 
+        -- ✓ use this instead:
+        KeyValidator = function(enteredKey)
+            if enteredKey == "Velo0city" then
+                return true -- this means the key is correct
+            end
+            return false -- this is if the key is not correct 
+        end,
+ 
+        Note = "Velocity Hub Key System.",
+        
+        Thumbnail = { -- the image which is located on the left. optional. it can be removed
+            Image = "rbxassetid://113993699078111",
+            Title = "Velocity Logo", -- optional. it can be removed
+        },
+        URL = "https://discord.gg/ckGvbX6EHr", -- link to get the key
+        
+        SaveKey = true, -- automatically save and load the key.
+    },
+})
+
+-- tabs
+
+local PlayerTab = Window:Tab({
+    Title = "Player",
+    Icon = "user",
+})
+
+local CombatTab = Window:Tab({
+    Title = "Combat",
+    Icon = "swords", -- optional
+})
+
+local VisualTab = Window:Tab({
+    Title = "Visual",
+    Icon = "eye",
+})
+
+local UtilitiesTab = Window:Tab({
+    Title = "Utilities",
+    Icon = "wrench",
+})
+
+local ServerTab = Window:Tab({
+    Title = "Server",
+    Icon = "server",
+})
+
+
+-- comabt buttons and shi sections
+
+local CombatSection = CombatTab:Section({
+    Title = "PVP / Combat"
+})
+
+local aimbot=false
+local magnet=false
+
+CombatTab:Toggle({
+Title="Aimbot",
+Callback=function(v)
+aimbot=v
+end
+})
+
+CombatTab:Toggle({
+Title="Magnet Aim",
+Callback=function(v)
+magnet=v
+end
+})
+
+RunService.RenderStepped:Connect(function()
+
+if not aimbot then return end
+
+local closest=nil
+local dist=math.huge
+
+for _,plr in pairs(Players:GetPlayers()) do
+
+if plr~=player and plr.Character and plr.Character:FindFirstChild("Head") then
+
+local mag=(player.Character.HumanoidRootPart.Position-plr.Character.Head.Position).Magnitude
+
+if mag<dist then
+dist=mag
+closest=plr.Character.Head
+end
+
+end
+end
+
+if closest then
+camera.CFrame=CFrame.new(camera.CFrame.Position,closest.Position)
+end
+
+end)
+
+-- PLAYER SECTION LOLZ 67
+
+local MainPlayerSection = PlayerTab:Section({
+    Title = "Local Player"
+    Icon = "user",
+})
+
+local SpeedSlider = PlayerTab:Slider({
+    Title = "Walkspeed",
+    Value = {
+        Min = 16,
+        Max = 200,
+        Default = 16
+    },
+    Callback = function(speed)
+      humanoid.WalkSpeed = speed
+    end
+})
+
+local JumpSlider = PlayerTab:Slider({
+    Title = "Jumppower",
+    Value = {
+        Min = 16,
+        Max = 200,
+        Default = 16
+    },
+    Callback = function(jump)
+      humanoid.JumpPower = jump
+    end
+})
+
+PlayerTab:Button({
+Title="Kill Player (Respawn)",
+Callback=function()
+player.Character:BreakJoints()
+end
+})
+
+local infjump=false
+local noclip=false
+
+PlayerTab:Toggle({
+Title="Infinite Jump",
+Callback=function(v)
+infjump=v
+end
+})
+
+UIS.JumpRequest:Connect(function()
+if infjump then
+player.Character.Humanoid:ChangeState("Jumping")
+end
+end)
+
+PlayerTab:Toggle({
+Title="Noclip",
+Callback=function(v)
+noclip=v
+end
+})
+
+RunService.Stepped:Connect(function()
+
+if noclip then
+
+for _,v in pairs(player.Character:GetDescendants()) do
+if v:IsA("BasePart") then
+v.CanCollide=false
+end
+end
+
+end
+
+end)
+
+local TPSection = PlayerTab:Section({
+    Title = "TP"
+    Icon = "user",
+})
+
+PlayerTab:Dropdown({
+Title="Select Player",
+Values=getnames()
+Callback=function(v)
+selected=v
+end
+})
+
+PlayerTab:Button({
+Title="Refresh List",
+Icon = "reload"
+Callback=function()
+getnames()
+end
+})
+
+
+PlayerTab:Button({
+Title="Teleport To Player",
+Callback=function()
+
+local target=Players:FindFirstChild(selected)
+
+if target and target.Character then
+player.Character:MoveTo(target.Character.HumanoidRootPart.Position)
+end
+
+end
+})
+
+PlayerTab:Button({
+Title="View Player",
+Callback=function()
+
+local target=Players:FindFirstChild(selected)
+
+if target and target.Character then
+camera.CameraSubject=target.Character.Humanoid
+end
+
+end
+})
+
+PlayerTab:Button({
+Title="Unview Player",
+Callback=function()
+camera.CameraSubject=player.Character.Humanoid
+end
+})
+
+-- VISUALS
+
+local VisualsSection = VisualTab:Section({
+    Title = "Visuals"
+    Icon = "eye"
+})
+
+local FOVSlider = VisualTab:Slider({
+    Title = "FOV Changer",
+    Value = {
+        Min = 16,
+        Max = 200,
+        Default = 16
+    },
+    Callback = function(fov)
+      workspace.CurrentCamera.FieldOfView = fov
+    end
+})
+
+local FPSInput = VisualTab:Input({
+    Title = "Set FPC CAP",
+    Desc = "Set Your FPS Cap (Frames Per Second)",
+    Icon = "square-pen",
+    Value = "60",
+    Callback = function(fps)
+        setfpscap(fps)
+    end
+})
+
+local Button = VisualsTab:Button({
+    Title = "FPS Booster",
+    Desc = "its in the name...",
+    Callback = function()
+        --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+-- By @bradarmz [TikTok]
+loadstring(game:HttpGet("https://pastebin.com/raw/Z0HT9FuL"))()
+    end
+})
+-- server
+
+ServerTab:Button({
+Title="Rejoin",
+Callback=function()
+TeleportService:Teleport(game.PlaceId,player)
+end
+})
+
+local gameid = 0
+
+local GameTPInput = ServerTab:Input({
+    Title = "Game TP",
+    Desc = "Game Teleporter By Roblox Game Id",
+    Icon = "square-pen",
+    Value = "0",
+    Callback = function(id)
+        local gameid = id
+        TeleportService:Teleport(gameid,player)
+    end
+})
+
+-- end 4 now
+
+
