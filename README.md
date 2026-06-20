@@ -4,9 +4,9 @@
 **Velocity Hub is In _Development_ At The Time**
 ## Features Section
 ### Humanoid
-- **Player Sliders, 
-- **Inf Jump, 
-- **Spectate, 
+- **Player Sliders,**
+- **Inf Jump,**
+- **Spectate,**
 - **Many More If U Try!**
 ### Scripts
 - **Ez Hub**
