@@ -1,7 +1,7 @@
 # Velocity Hub / Script Hub
 
 **Made By Arcy (Developer)**
-** Velocity Hub is In __Development__ At The Time**
+**Velocity Hub is In __Development__ At The Time**
 ## Features Section
 ### Humanoid
 - **Player Sliders, Inf Jump, Spectate, More**
@@ -9,4 +9,4 @@
 - **Ez Hub**
 - **Infinite Yield♾️**
 - **c00lkidd v2 gui🕶️**
-- **Owl Hub🦉
+- **Owl Hub🦉**
