@@ -1,7 +1,7 @@
 # Velocity Hub / Script Hub
 
 **Made By Arcy (Developer)**\
-**Velocity Hub is In__Development__At The Time**
+**Velocity Hub is In _Development_ At The Time**
 ## Features Section
 ### Humanoid
 - **Player Sliders, 
